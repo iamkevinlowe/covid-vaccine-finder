@@ -1,0 +1,5 @@
+.idea
+dist/*
+!dist/vendor
+!dist/manifest.json
+node_modules
