@@ -1,10 +1,10 @@
 {
 	"name": "Covid Vaccine Finder",
-	"version": "1.0",
+	"version": "1.0.1",
 	"description": "Checks for available vaccine appointments",
 	"permissions": [
-		"activeTab",
-		"https://*/*",
+		"https://*.sandiegocounty.gov/*",
+		"https://*.calvax.org/*",
 		"storage",
 		"tabs"
 	],
