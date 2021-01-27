@@ -1,0 +1,40 @@
+body {
+	width: 500px;
+}
+
+section {
+	padding: 10px;
+
+	&:not(:first-child) {
+		border-top: 1px solid black;
+	}
+
+	&#patient_details_section {
+		&.form_active {
+			div#patients_container,
+			button#add_patient_details_button {
+				display: none;
+			}
+
+			form#new_patient_details_form {
+				display: block;
+			}
+		}
+
+		div#patients_container button.patient_details_button.active {
+			background: lightgreen;
+		}
+
+		form#new_patient_details_form {
+			display: none;
+		}
+	}
+
+	&#sites_section {
+		display: none;
+
+		&.has_sites {
+			display: block;
+		}
+	}
+}

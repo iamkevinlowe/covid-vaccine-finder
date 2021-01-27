@@ -6,41 +6,15 @@
 		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Covid Vaccine Finder Popup</title>
-	<style>
-		body {
-			width: 500px;
-		}
-
-		section {
-			padding: 10px;
-		}
-
-		section:not(:last-child) {
-			border-bottom: 1px solid black;
-		}
-
-		section#patient_details_section form#new_patient_details_form {
-			display: none;
-		}
-
-		section#patient_details_section.form_active form#new_patient_details_form {
-			display: block;
-		}
-
-		section#patient_details_section.form_active div#patients_container,
-		section#patient_details_section.form_active button#add_patient_details_button {
-			display: none;
-		}
-
-		section#patient_details_section div#patients_container button.patient_details_button.active {
-			background: lightgreen;
-		}
-	</style>
 </head>
 <body>
 	<main>
 		<section>
-			<button id="go_to_button">Go to SD County Vaccine Page</button>
+			<h5>Settings</h5>
+			<label>
+				<input type="checkbox" id="pause_automation_checkbox">
+				Pause Automation
+			</label>
 		</section>
 		<section id="patient_details_section">
 			<h5>Patient Details</h5>
@@ -354,12 +328,26 @@
 					<input type="radio" name="covid_vaccine_number" value="second_time" required>
 					Second Covid Vaccine
 				</label>
+				<label>
+					<input type="checkbox" name="vaccine_ids[]" value="20">
+					Moderna Covid Vaccine
+				</label>
+				<label>
+					<input type="checkbox" name="vaccine_ids[]" value="21" disabled> <!-- Disabled until real value is found -->
+					Pfizer Covid Vaccine
+				</label>
 				<input type="submit" value="Submit">
 				<input type="button" id="new_patient_details_form_cancel_button" value="Cancel">
 			</form>
 			<button id="add_patient_details_button">Add Patient Details</button>
 		</section>
-		<section id="sites_section"></section>
+		<section>
+			<h5>Covid Pages</h5>
+			<button id="go_to_button">Go to SD County Vaccine Page</button>
+		</section>
+		<section id="sites_section">
+			<h5>Covid Sites</h5>
+		</section>
 	</main>
 </body>
 </html>

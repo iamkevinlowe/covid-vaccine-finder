@@ -1,6 +1,7 @@
 import { EVENTS } from './constants';
 
 const activeCovidPage = {};
+const settings = {};
 
 chrome.storage.local.remove(['activeCovidPage']);
 
@@ -14,10 +15,13 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 			handleOpenedEvent(message, sender);
 			break;
 		case EVENTS.CHECK_APPOINTMENTS:
-			handleCheckAppointments(message, sender);
+			handleCheckAppointments(message);
 			break;
 		case EVENTS.OPEN_SITE_APPOINTMENT_PAGE:
-			handleOpenSiteAppointmentPage(message, sender);
+			handleOpenSiteAppointmentPage(message);
+			break;
+		case EVENTS.STORAGE_UPDATED:
+			handleStorageUpdated(message);
 			break;
 	}
 });
@@ -28,12 +32,19 @@ chrome.tabs.onRemoved.addListener(tabId => {
 		delete activeCovidPage.tabId;
 		delete activeCovidPage.siteTabIds;
 		chrome.storage.local.remove(['activeCovidPage']);
-		chrome.runtime.sendMessage({ event: EVENTS.STORAGE_UPDATED, key: 'activeCovidPage' });
+		chrome.runtime.sendMessage({
+			event: EVENTS.STORAGE_UPDATED,
+			key: 'activeCovidPage'
+		});
 	}
 });
 
 chrome.tabs.onUpdated.addListener(tabId => {
-	if (activeCovidPage.siteTabIds && activeCovidPage.siteTabIds.includes(tabId)) {
+	if (
+		!settings.pauseAutomation
+		&& activeCovidPage.siteTabIds
+		&& activeCovidPage.siteTabIds.includes(tabId)
+	) {
 		chrome.tabs.sendMessage(tabId, { event: EVENTS.BEGIN_APPOINTMENT_FORM });
 	}
 });
@@ -72,3 +83,21 @@ const handleOpenSiteAppointmentPage = message => {
 		});
 	});
 };
+
+const handleStorageUpdated = message => {
+	if (message.key === 'settings') {
+		loadSettings();
+	}
+};
+
+const loadSettings = () => {
+	const defaultSettings = {
+		pauseAutomation: false
+	};
+
+	chrome.storage.local.get(['settings'], ({ settings: storedSettings = {} }) => {
+		Object.assign(settings, defaultSettings, storedSettings);
+	});
+};
+
+loadSettings();
