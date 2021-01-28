@@ -9,7 +9,7 @@
 </head>
 <body>
 	<main>
-		<section>
+		<section id="settings_section">
 			<h5>Settings</h5>
 			<label>
 				<input type="checkbox" id="pause_automation_checkbox">
@@ -23,6 +23,7 @@
 				<input type="text" name="first_name" placeholder="First Name" required>
 				<input type="text" name="last_name" placeholder="Last Name" required>
 				<input type="text" name="mothers_maiden_name" placeholder="Mother's Maiden Name" required>
+
 				<select name="race" required>
 					<option value="">Select Race</option>
 					<option value="american_indian_or_alaska_native">American Indian or Alaska Native</option>
@@ -62,6 +63,7 @@
 					<option value="Service - Transportation">Service - Transportation</option>
 					<option value="Skilled agricultural, forestry and fishery workers">Skilled agricultural, forestry and fishery workers</option>
 				</select>
+
 				<select name="date_of_birth(2i)" required>
 					<option value="">Select DOB Month</option>
 					<option value="1">January</option>
@@ -236,6 +238,7 @@
 					<option value="2020">2020</option>
 					<option value="2021">2021</option>
 				</select>
+
 				<select name="sex" required>
 					<option value="">Select Gender</option>
 					<option value="m">Male</option>
@@ -243,6 +246,7 @@
 					<option value="o">Other</option>
 				</select>
 				<input type="email" name="email" placeholder="Email" required>
+
 				<input type="tel" name="phone_number" placeholder="Phone" required>
 				<input type="text" name="address" placeholder="Address" required>
 				<input type="text" name="city" placeholder="City" required>
@@ -305,7 +309,6 @@
 					<option value="74">Stanislaus</option>
 					<option value="75">Sutter</option>
 					<option value="76">Tehama</option>
-					<option value="86">Test County</option>
 					<option value="77">Trinity</option>
 					<option value="78">Tulare</option>
 					<option value="79">Tuolumne</option>
@@ -313,6 +316,7 @@
 					<option value="81">Yolo</option>
 					<option value="82">Yuba</option>
 				</select>
+
 				<select name="insurance_type" required>
 					<option value="">Select Insurance Type</option>
 					<option value="Private">Private Insurance</option>
@@ -320,33 +324,39 @@
 					<option value="Medicare">Medicare</option>
 					<option value="No Insurance">No Insurance</option>
 				</select>
-				<label>
-					<input type="radio" name="covid_vaccine_number" value="first_time" required>
-					First Covid Vaccine
-				</label>
-				<label>
-					<input type="radio" name="covid_vaccine_number" value="second_time" required>
-					Second Covid Vaccine
-				</label>
-				<label>
-					<input type="checkbox" name="vaccine_ids[]" value="20">
-					Moderna Covid Vaccine
-				</label>
-				<label>
-					<input type="checkbox" name="vaccine_ids[]" value="21" disabled> <!-- Disabled until real value is found -->
-					Pfizer Covid Vaccine
-				</label>
-				<input type="submit" value="Submit">
-				<input type="button" id="new_patient_details_form_cancel_button" value="Cancel">
+
+				<div>
+					<label>
+						<input type="radio" name="covid_vaccine_number" value="first_time" required>
+						First Covid Vaccine
+					</label>
+					<label>
+						<input type="radio" name="covid_vaccine_number" value="second_time" required>
+						Second Covid Vaccine
+					</label>
+				</div>
+
+				<div>
+					<label>
+						<input type="checkbox" name="vaccine_ids[]" value="20">
+						Moderna Covid Vaccine
+					</label>
+					<label>
+						<input type="checkbox" name="vaccine_ids[]" value="21" disabled> <!-- Disabled until real value is found -->
+						Pfizer Covid Vaccine
+					</label>
+				</div>
+
+				<div>
+					<input type="submit" value="Submit">
+					<input type="button" id="new_patient_details_form_cancel_button" value="Cancel">
+				</div>
 			</form>
 			<button id="add_patient_details_button">Add Patient Details</button>
 		</section>
-		<section>
-			<h5>Covid Pages</h5>
-			<button id="go_to_button">Go to SD County Vaccine Page</button>
-		</section>
-		<section id="sites_section">
-			<h5>Covid Sites</h5>
+		<section id="find_appointments_section">
+			<h5>Find Appointments</h5>
+			<button class="find_appointments_button" data-county="san_diego">San Diego</button>
 		</section>
 	</main>
 </body>

@@ -6,7 +6,7 @@ section {
 	padding: 10px;
 
 	&:not(:first-child) {
-		border-top: 1px solid black;
+		border-top: 1px solid lightgrey;
 	}
 
 	&#patient_details_section {
@@ -27,14 +27,23 @@ section {
 
 		form#new_patient_details_form {
 			display: none;
+
+			input,
+			select {
+				padding: 3px 6px;
+				margin: 2px;
+			}
 		}
 	}
 
-	&#sites_section {
-		display: none;
+	h5 {
+		margin-top: 0;
+	}
 
-		&.has_sites {
-			display: block;
-		}
+	button {
+		border-width: 1px;
+		border-radius: 3px;
+		margin: 2px;
+		padding: 3px 6px;
 	}
 }
