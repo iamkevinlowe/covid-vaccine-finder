@@ -1,53 +1,35 @@
-import { EVENTS, PAGES, SITES } from './constants';
-const { OPENED, CHECK_APPOINTMENTS, OPEN_SITE_APPOINTMENT_PAGE } = EVENTS;
-const { SD_COVID } = PAGES;
-const SD_COVID_SITES = SITES[SD_COVID];
+import { COUNTIES, EVENTS, SITE_SELECTORS } from './constants';
+const { SAN_DIEGO } = COUNTIES;
+const { OPEN_SITE_APPOINTMENT_PAGE } = EVENTS;
+const SITES = SITE_SELECTORS[SAN_DIEGO];
 
-chrome.runtime.sendMessage({ page: SD_COVID, event: OPENED });
-
-chrome.runtime.onMessage.addListener(message => {
-	if (message.page !== SD_COVID) {
+chrome.storage.local.get(['activePatient', 'settings'], ({ activePatient = null, settings = {} }) => {
+	if (!activePatient) {
+		alert('No patient selected. Select a patient in the [Patient Details] section, or enter new patient details to get started.');
 		return;
 	}
 
-	if (message.event === CHECK_APPOINTMENTS) {
-		chrome.storage.local.get(['activePatient'], ({ activePatient }) => {
-			if (!activePatient) {
-				alert('There is no active patient selected. Please choose one, or add patient details.');
-				return;
-			}
-			handleCheckAppointments(message);
-		});
+	if (settings.pauseAutomation) {
+		alert('Automation is disabled.');
+		return;
 	}
+
+	handleCheckAppointments();
 });
 
-const handleCheckAppointments = message => {
-	let $appointmentsTable;
+const handleCheckAppointments = () => {
+	const urls = Object.keys(SITES).reduce((urls, site) => {
+		$(SITES[site]).parents('.parbase.section')
+			.next()
+			.find('table a')
+			.each((i, e) => {
+				urls[site] = urls[site] || [];
+				urls[site].push(e.getAttribute('href'));
+			});
 
-	switch (message.site) {
-		case SD_COVID_SITES.SHARP_SOUTH_BAY_SUPER_STATION:
-			$appointmentsTable = $('#southbay').parents('.parbase.section')
-				.next()
-				.find('table');
-			break;
-		case SD_COVID_SITES.SHARP_CORONADO_HOSPITAL:
-			$appointmentsTable = $('#coronado').parents('.parbase.section')
-				.next()
-				.find('table');
-			break;
-		case SD_COVID_SITES.SHARP_GROSSMONT_HOSPITAL:
-			$appointmentsTable = $('#grossmontAppointment').parents('.parbase.section')
-				.next()
-				.find('table');
-			break;
-	}
+		return urls;
+	}, {});
 
-	if (!$appointmentsTable.length) {
-		alert('No appointments found');
-		return;
-	}
-
-	const urls = $appointmentsTable.find('a').map((i, e) => e.getAttribute('href')).toArray();
 	chrome.runtime.sendMessage({
 		event: OPEN_SITE_APPOINTMENT_PAGE,
 		urls

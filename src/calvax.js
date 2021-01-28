@@ -1,52 +1,48 @@
 import { EVENTS } from './constants';
-const { BEGIN_APPOINTMENT_FORM } = EVENTS;
+const { FOUND_APPOINTMENTS } = EVENTS;
 
-chrome.runtime.onMessage.addListener(message => {
-	if (typeof message !== 'object') {
+chrome.storage.local.get(['activePatient', 'settings'], ({ activePatient = null, settings = {} }) => {
+	if (!activePatient) {
+		alert('No patient selected. Select a patient in the [Patient Details] section, or enter new patient details to get started.');
 		return;
 	}
 
-	if (message.event === BEGIN_APPOINTMENT_FORM) {
-		handleBeginAppointmentForm();
+	if (settings.pauseAutomation) {
+		alert('Automation is disabled.');
+		return;
 	}
+
+	handleBeginAppointmentForm(activePatient);
 });
 
-const handleBeginAppointmentForm = () => {
-	chrome.storage.local.get(['activePatient'], ({ activePatient }) => {
-		if (!activePatient) {
-			alert('No active patient found!');
-			close();
-			return;
+const handleBeginAppointmentForm = patient => {
+	try {
+		const url = new URL(location.href);
+		switch (url.searchParams.get('next_step')) {
+			case null: // Step 1: Personal Information
+				handlePersonalInformation(patient);
+				break;
+			case 'health_insurance': // Step 2: Health Insurance
+				handleHealthInsurance(patient);
+				break;
+			case 'health_questions': // Step 3: Health Questions
+				handleHealthQuestions(patient);
+				break;
+			case 'consent_for_services': // Step 5: Consent For Services
+				handleConsentForServices(patient);
+				break;
+			case 'review': // Step 6: Review
+				handleReview();
+				break;
+			case 'appointment': // Step 7: Appointment
+				handleAppointment();
+				break;
+			default:
+				throw new Error('Could not detect what to do here');
 		}
-
-		try {
-			const url = new URL(location.href);
-			switch (url.searchParams.get('next_step')) {
-				case null: // Step 1: Personal Information
-					handlePersonalInformation(activePatient);
-					break;
-				case 'health_insurance': // Step 2: Health Insurance
-					handleHealthInsurance(activePatient);
-					break;
-				case 'health_questions': // Step 3: Health Questions
-					handleHealthQuestions(activePatient);
-					break;
-				case 'consent_for_services': // Step 5: Consent For Services
-					handleConsentForServices(activePatient);
-					break;
-				case 'review': // Step 6: Review
-					handleReview();
-					break;
-				case 'appointment': // Step 7: Appointment
-					handleAppointment();
-					break;
-				default:
-					throw new Error('Could not detect what to do here');
-			}
-		} catch (e) {
-			alert(`Encountered an error: ${e.message}`);
-		}
-	});
+	} catch (e) {
+		alert(`Encountered an error: ${e.message}`);
+	}
 };
 
 const handlePersonalInformation = patient => {
@@ -73,7 +69,7 @@ const handlePersonalInformation = patient => {
 
 	fields.forEach(field => {
 		document.querySelector(`[name="patient[${field}]"]`)
-			.value = patient[field]
+			.value = patient[field];
 	});
 
 	document.querySelector('input[type="submit"][name="commit"]')
@@ -129,9 +125,28 @@ const handleConsentForServices = patient => {
 };
 
 const handleReview = () => {
-
+	document.querySelector('button[type="submit"][name="next_step"]')
+		.click();
 };
 
 const handleAppointment = () => {
+	const appointments = [];
 
+	document.querySelectorAll('input[name="appointment[appointment_at]"]')
+		.forEach(element => {
+			if (!element.hasAttribute('disabled')) {
+				appointments.push(element.value);
+			}
+		});
+
+	if (!appointments.length) {
+		close();
+		return;
+	}
+
+	chrome.runtime.sendMessage({
+		event: FOUND_APPOINTMENTS,
+		appointments
+	});
+	alert(`Found ${appointments.length} available appointments!`);
 };
