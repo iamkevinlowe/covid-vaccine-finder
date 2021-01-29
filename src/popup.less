@@ -9,6 +9,37 @@ section {
 		border-top: 1px solid lightgrey;
 	}
 
+	&#settings_section {
+		&.form_active {
+			form#settings_form {
+				input[type="submit"],
+				input#settings_form_cancel_button[type="button"] {
+					display: inline;
+				}
+
+				input#edit_settings_button[type="button"] {
+					display: none;
+				}
+			}
+		}
+
+		form#settings_form {
+			label {
+				margin-right: 8px;
+
+				input,
+				span {
+					vertical-align: middle;
+				}
+			}
+
+			input[type="submit"],
+			input#settings_form_cancel_button[type="button"] {
+				display: none;
+			}
+		}
+	}
+
 	&#patient_details_section {
 		&.form_active {
 			div#patients_container,

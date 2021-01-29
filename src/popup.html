@@ -11,10 +11,19 @@
 	<main>
 		<section id="settings_section">
 			<h5>Settings</h5>
-			<label>
-				<input type="checkbox" id="pause_automation_checkbox">
-				Pause Automation
-			</label>
+			<form id="settings_form">
+				<label>
+					<input type="checkbox" id="pause_automation_checkbox">
+					<span>Pause Automation</span>
+				</label>
+				<label>
+					<input type="number" id="interval_input" min="0" max="1440">
+					<span>Minutes to Retry</span>
+				</label>
+				<input type="submit" value="Submit">
+				<input type="button" id="settings_form_cancel_button" value="Cancel">
+				<input type="button" id="edit_settings_button" value="Edit">
+			</form>
 		</section>
 		<section id="patient_details_section">
 			<h5>Patient Details</h5>
@@ -342,7 +351,7 @@
 						Moderna Covid Vaccine
 					</label>
 					<label>
-						<input type="checkbox" name="vaccine_ids[]" value="21" disabled> <!-- Disabled until real value is found -->
+						<input type="checkbox" name="vaccine_ids[]" value="19">
 						Pfizer Covid Vaccine
 					</label>
 				</div>

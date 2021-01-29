@@ -14,17 +14,8 @@ const openPageForCounty = county => {
 		return;
 	}
 
-	chrome.storage.local.get(['activePatient', 'settings'], ({ activePatient = null, settings = {} }) => {
-		if (!activePatient) {
-			alert('No patient selected. Select a patient in the [Patient Details] section, or enter new patient details to get started.');
-			return;
-		}
-
-		if (settings.pauseAutomation) {
-			alert('Automation is disabled.');
-			return;
-		}
-
-		chrome.tabs.create({ url: PAGE_URLS[county] });
+	chrome.tabs.create({
+		active: false,
+		url: PAGE_URLS[county]
 	});
 };

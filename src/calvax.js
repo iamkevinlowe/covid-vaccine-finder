@@ -1,14 +1,11 @@
 import { EVENTS } from './constants';
-const { FOUND_APPOINTMENTS } = EVENTS;
+const { CLOSE_TAB, FOUND_APPOINTMENTS } = EVENTS;
 
 chrome.storage.local.get(['activePatient', 'settings'], ({ activePatient = null, settings = {} }) => {
-	if (!activePatient) {
-		alert('No patient selected. Select a patient in the [Patient Details] section, or enter new patient details to get started.');
-		return;
-	}
-
-	if (settings.pauseAutomation) {
-		alert('Automation is disabled.');
+	if (
+		!activePatient
+		|| settings.pauseAutomation
+	) {
 		return;
 	}
 
@@ -96,11 +93,19 @@ const handleHealthQuestions = patient => {
 };
 
 const handleConsentForServices = patient => {
-	const element = document.querySelector(`[name="patient[vaccination_ids][]"][value="20"]`);
-	if (!element) {
-		throw new Error('Selected vaccine unable');
+	const vaccineFound = patient['vaccine_ids[]'].some(id => {
+		const element = document.querySelector(`[name="patient[vaccination_ids][]"][value="${id}"]`);
+		if (element) {
+			element.setAttribute('checked', true);
+			return true;
+		}
+		return false;
+	});
+
+	if (!vaccineFound) {
+		chrome.runtime.sendMessage({ event: CLOSE_TAB });
+		return;
 	}
-	element.setAttribute('checked', true);
 
 	try {
 		Array.from(document.querySelectorAll('a'))
@@ -134,13 +139,16 @@ const handleAppointment = () => {
 
 	document.querySelectorAll('input[name="appointment[appointment_at]"]')
 		.forEach(element => {
-			if (!element.hasAttribute('disabled')) {
+			if (
+				!element.hasAttribute('disabled')
+				&& element.value !== 'waiting'
+			) {
 				appointments.push(element.value);
 			}
 		});
 
 	if (!appointments.length) {
-		close();
+		chrome.runtime.sendMessage({ event: CLOSE_TAB });
 		return;
 	}
 
@@ -148,5 +156,4 @@ const handleAppointment = () => {
 		event: FOUND_APPOINTMENTS,
 		appointments
 	});
-	alert(`Found ${appointments.length} available appointments!`);
 };

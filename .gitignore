@@ -1,5 +1,6 @@
 .idea
 dist/*
+!dist/images
 !dist/vendor
 !dist/manifest.json
 node_modules
