@@ -9,6 +9,11 @@ chrome.storage.local.get(['activePatient', 'settings'], ({ activePatient = null,
 		return;
 	}
 
+	if (location.pathname === '/clinic/search') {
+		chrome.runtime.sendMessage({ event: CLOSE_TAB });
+		return;
+	}
+
 	handleBeginAppointmentForm(activePatient);
 });
 
