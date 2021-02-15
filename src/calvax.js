@@ -94,7 +94,26 @@ const handleHealthQuestions = patient => {
 		.forEach(element => element.setAttribute('checked', true));
 
 	document.querySelector(`[name="patient[covid_vaccine_number]"][value="${patient.covid_vaccine_number}"]`)
-		.setAttribute('checked', true);
+		.click();
+
+	if (patient.covid_vaccine_number === 'second_time') {
+		const vaccineIdMap = {
+			19: 'pfizer',
+			20: 'moderna'
+		}
+		const selected = patient['vaccine_ids[]'].some(id => {
+			const element = document.querySelector(`[name="patient[first_vaccine_brand]"][value="${vaccineIdMap[id]}"]`);
+			if (element) {
+				element.setAttribute('checked', true);
+				return true;
+			}
+			return false;
+		});
+		if (!selected) {
+			document.querySelector(`[name="patient[first_vaccine_brand]"][value="dont_know"]`)
+				.setAttribute('checked', true);
+		}
+	}
 
 	document.querySelector('button[type="submit"][name="next_step"]')
 		.click();
