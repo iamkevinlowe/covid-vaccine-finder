@@ -1,17 +1,14 @@
-chrome.storage.local.get(['activePatient', 'patients'], ({ activePatient, patients }) => {
+chrome.storage.local.get(['patients'], ({ patients }) => {
 	if (patients) {
 		showPatients(patients);
-	}
-
-	if (activePatient) {
-		const patientButton = document.querySelector(`button.patient_details_button[data-key=${activePatient.key}]`);
-		if (patientButton) {
-			patientButton.classList.add('active');
-		}
 	}
 });
 
 const patientsContainer = document.getElementById('patients_container');
+const addPatientDetailsButton = document.getElementById('add_patient_details_button');
+const newPatientDetailsForm = document.getElementById('new_patient_details_form');
+const newPatientDetailsFormCancelButton = document.getElementById('new_patient_details_form_cancel_button')
+
 patientsContainer.addEventListener('click', e => {
 	if (!e.target) {
 		return;
@@ -30,20 +27,19 @@ patientsContainer.addEventListener('click', e => {
 			}
 		} else if (e.target.matches('button.patient_edit_button')) {
 			toggleNewPatientDetailsForm(true);
-			const form = document.getElementById('new_patient_details_form');
 
 			Object.keys(patient).forEach(key => {
 				if (key === 'key' || key === 'email_confirmation') {
 					return;
 				}
 
-				if (form.elements[key]) {
+				if (newPatientDetailsForm.elements[key]) {
 					if (Array.isArray(patient[key])) {
-						form.elements[key].forEach(element => {
+						newPatientDetailsForm.elements[key].forEach(element => {
 							element.checked = patient[key].includes(element.value);
 						});
 					} else {
-						form.elements[key].value = patient[key];
+						newPatientDetailsForm.elements[key].value = patient[key];
 					}
 				}
 			});
@@ -59,10 +55,8 @@ patientsContainer.addEventListener('click', e => {
 	});
 });
 
-const addPatientDetailsButton = document.getElementById('add_patient_details_button');
 addPatientDetailsButton.addEventListener('click', () => toggleNewPatientDetailsForm(true));
 
-const newPatientDetailsForm = document.getElementById('new_patient_details_form');
 newPatientDetailsForm.addEventListener('submit', e => {
 	e.preventDefault();
 
@@ -129,15 +123,7 @@ newPatientDetailsForm.addEventListener('submit', e => {
 	toggleNewPatientDetailsForm(false);
 });
 
-const newPatientDetailsFormCancelButton = document.getElementById('new_patient_details_form_cancel_button')
-newPatientDetailsFormCancelButton.addEventListener('click', () => {
-	Array.from(newPatientDetailsForm.elements).forEach(element => {
-		if (element.hasAttribute('required')) {
-			element.value = '';
-		}
-	});
-	toggleNewPatientDetailsForm(false);
-});
+newPatientDetailsFormCancelButton.addEventListener('click', () => toggleNewPatientDetailsForm(false));
 
 const showPatients = patients => {
 	patientsContainer.innerHTML = '';
@@ -164,9 +150,30 @@ const showPatients = patients => {
 
 		patientsContainer.appendChild(div);
 	});
+
+	chrome.storage.local.get(['activePatient'], ({ activePatient }) => {
+		if (activePatient && activePatient.key) {
+			const patientButton = document.querySelector(`button.patient_details_button[data-key=${activePatient.key}]`);
+			if (patientButton) {
+				patientButton.classList.add('active');
+			}
+		}
+	});
+};
+
+const clearForm = () => {
+	Array.from(newPatientDetailsForm.elements).forEach(element => {
+		if (element.type === 'radio' || element.type === 'checkbox') {
+			element.checked = false;
+		} else if (element.hasAttribute('required')) {
+			element.value = '';
+		}
+	});
 };
 
 const toggleNewPatientDetailsForm = toShow => {
+	clearForm();
+
 	const section = document.getElementById('patient_details_section');
 	section.classList[toShow ? 'add' : 'remove']('form_active');
 };
