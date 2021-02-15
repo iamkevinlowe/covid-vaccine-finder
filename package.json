@@ -1,6 +1,6 @@
 {
 	"name": "covid-vaccine-finder",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Checks for available vaccine appointments",
 	"main": "src/background.js",
 	"scripts": {

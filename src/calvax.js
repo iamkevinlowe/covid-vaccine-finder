@@ -9,7 +9,10 @@ chrome.storage.local.get(['activePatient', 'settings'], ({ activePatient = null,
 		return;
 	}
 
-	if (location.pathname === '/clinic/search') {
+	if (
+		location.pathname === '/clinic/search'
+		|| location.pathname === '/errors'
+	) {
 		chrome.runtime.sendMessage({ event: CLOSE_TAB });
 		return;
 	}

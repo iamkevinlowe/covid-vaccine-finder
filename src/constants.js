@@ -17,6 +17,7 @@ export const SITE_SELECTORS = {
 	[COUNTIES.SAN_DIEGO]: {
 		SHARP_GROSSMONT_HOSPITAL: '#grossmontAppointment',
 		SHARP_CORONADO_HOSPITAL: '#coronado',
-		SHARP_SOUTH_BAY_SUPER_STATION: '#southbay'
+		SHARP_SOUTH_BAY_SUPER_STATION: '#southbay',
+		SHARP_OPERATION_COLLABORATION: '#countyFire'
 	}
 };

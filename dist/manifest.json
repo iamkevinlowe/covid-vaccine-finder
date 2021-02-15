@@ -1,6 +1,6 @@
 {
 	"name": "Covid Vaccine Finder",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Checks for available vaccine appointments",
 	"permissions": [
 		"alarms",
@@ -27,7 +27,7 @@
 			"run_at": "document_end"
 		},
 		{
-			"matches": ["https://cw.calvax.org/*"],
+			"matches": ["https://*.calvax.org/*"],
 			"js": ["calvax.js"],
 			"run_at": "document_end"
 		}

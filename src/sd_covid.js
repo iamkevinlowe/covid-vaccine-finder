@@ -17,7 +17,8 @@ chrome.storage.local.get(['activePatient', 'settings'], ({ activePatient = null,
 const handleCheckAppointments = () => {
 	const urls = Object.keys(SITES).reduce((urls, site) => {
 		$(SITES[site]).parents('.parbase.section')
-			.next()
+			.nextAll('.table.parbase.section')
+			.first()
 			.find('table a')
 			.each((i, e) => {
 				urls[site] = urls[site] || [];
