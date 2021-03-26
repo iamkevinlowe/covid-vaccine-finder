@@ -24,7 +24,7 @@ const handleBeginAppointmentForm = patient => {
 	try {
 		const url = new URL(location.href);
 		switch (url.searchParams.get('next_step')) {
-			case null: // Step 1: Personal Information
+			case 'personal_information': // Step 1: Personal Information
 				handlePersonalInformation(patient);
 				break;
 			case 'health_insurance': // Step 2: Health Insurance
