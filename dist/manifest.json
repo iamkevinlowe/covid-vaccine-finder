@@ -6,6 +6,7 @@
 		"alarms",
 		"https://*.sandiegocounty.gov/*",
 		"https://*.calvax.org/*",
+		"https://*.caprepmod.org/*",
 		"notifications",
 		"storage",
 		"tabs"
@@ -27,7 +28,7 @@
 			"run_at": "document_end"
 		},
 		{
-			"matches": ["https://*.calvax.org/*"],
+			"matches": ["https://*.calvax.org/*", "https://*.caprepmod.org/*"],
 			"js": ["calvax.js"],
 			"run_at": "document_end"
 		}
