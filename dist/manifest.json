@@ -1,6 +1,6 @@
 {
 	"name": "Covid Vaccine Finder",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Checks for available vaccine appointments",
 	"permissions": [
 		"alarms",

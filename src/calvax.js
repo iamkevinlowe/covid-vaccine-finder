@@ -135,7 +135,7 @@ const handleConsentForServices = patient => {
 	}
 
 	try {
-		Array.from(document.querySelectorAll('a'))
+		Array.from(document.querySelectorAll('button'))
 			.find(element => element.innerText.toLowerCase() === 'type my full name')
 			.click();
 		document.querySelector('[name="patient[signatory_first_name]"]')
@@ -157,7 +157,7 @@ const handleConsentForServices = patient => {
 };
 
 const handleReview = () => {
-	document.querySelector('button[type="submit"][name="next_step"]')
+	document.querySelector('button#save_and_submit_button')
 		.click();
 };
 

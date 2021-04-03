@@ -46,7 +46,7 @@ patientsContainer.addEventListener('click', e => {
 		} else if (e.target.matches('button.patient_remove_button')) {
 			delete patients[e.target.dataset.key];
 			chrome.storage.local.set({ patients });
-			if (activePatient.key === patient.key) {
+			if (activePatient?.key === patient.key) {
 				chrome.storage.local.remove(['activePatient']);
 			}
 			document.querySelectorAll(`button[data-key=${patient.key}]`)
