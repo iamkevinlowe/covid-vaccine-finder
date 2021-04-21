@@ -1,5 +1,9 @@
 # Covid Vaccine Finder
 
+### 🆕 Update 2021-04-15
+The San Diego County vaccine website that this extension visits is no longer in use.  Please visit https://vaccinefinder.org/ if you are looking for vaccine appointments.  Feel free to continue to use for educational purposes.
+
+### Description
 Chrome Extension to help find available covid vaccine appointments.  This currently only supports vaccination sites in San Diego County as of Jan 28, 2021.  This can be set to retry at user-defined intervals (in minutes) until available appointments are found.
 
 ### Development
